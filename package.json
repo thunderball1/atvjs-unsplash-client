@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "atvjs": "^0.2.2"
+    "atvjs": "^0.2.2",
+    "object-assign": "^4.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.6.5",
