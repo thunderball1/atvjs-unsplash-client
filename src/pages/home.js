@@ -18,7 +18,7 @@ let HomePage = ATV.Page.create({
                <section>`;
 
     for (var i = 0; i < data.length; i++) {
-      tmpl += '<lockup has-detail="true">';
+      tmpl += '<lockup data-action="showDetail">';
       tmpl += `<img src="https://peaceful-dusk-20602.herokuapp.com/${ data[i] }.jpg" />`
       tmpl += '</lockup>';
     }

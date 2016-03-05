@@ -48,14 +48,14 @@ ATV.start({
   },
   handlers: {
     select: {
-      globalSelecthandler(e) {
+      globalSelectHandler(e) {
         let element = e.target;
 
-        let hasDetail = element.getAttribute('has-detail');
+        let action = element.getAttribute('data-action');
 
-        if (hasDetail) {
+        if (action === 'showDetail') {
 
-          let img = el.getElementsByTagName('img');
+          let img = element.getElementsByTagName('img');
 
           let photo;
           photo = img.item(0).getAttribute('src');
@@ -63,12 +63,14 @@ ATV.start({
           ATV.Navigation.presentModal(`<document>
                                         <oneupTemplate mode="oneup caption" allowsZooming="true">
                                           <section>
-                                             <lockup id="photo">
+                                             <lockup data-action="dismissModal">
                                                 <img src="${ photo }" />
                                              </lockup>
                                           </section>
                                        </oneupTemplate>
                                       </document>`);
+        } else if(action === 'dismissModal') {
+          ATV.Navigation.dismissModal();
         }
 
       }
