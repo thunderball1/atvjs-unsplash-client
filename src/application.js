@@ -23,7 +23,16 @@ let Menu = ATV.Menu.create({
         attributes: {
             autoHighlight: true // auto highlight on navigate
         }
-    }]
+    },
+    {
+        id: 'collections',
+        name: 'Collections',
+        page: CollectionsPage,
+        attributes: {
+            autoHighlight: false // auto highlight on navigate
+        }
+    }
+    ]
 });
 
 ATV.start({
