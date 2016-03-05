@@ -1,8 +1,16 @@
 import ATV from 'atvjs';
-import CollectionsPage from './pages/collections';
+import CollectionsPage from './pages/collections.js';
+import HomePage from './pages/home.js';
 
 const CLIENT_ID = 'b9288b9e4913497056fbdd1255c0147b6ed3e8e201811f2f3023f6fd5b9e3af0';
 
+const loaderTpl = (data) => `<document>
+    <loadingTemplate>
+        <activityIndicator>
+            <title>${data.message}</title>
+        </activityIndicator>
+    </loadingTemplate>
+</document>`;
 
 let Menu = ATV.Menu.create({
     // any attributes that you want to set on the root level menuBar element of TVML
@@ -19,8 +27,11 @@ let Menu = ATV.Menu.create({
 });
 
 ATV.start({
-	menu: Menu,
-	onLaunch(options) {
-		ATV.Navigation.navigateToMenuPage();
-	}
+  menu: Menu,
+  templates: {
+    loader: loaderTpl
+  },
+  onLaunch(options) {
+    ATV.Navigation.navigateToMenuPage();
+  }
 });
