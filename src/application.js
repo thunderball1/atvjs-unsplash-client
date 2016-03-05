@@ -14,40 +14,65 @@ const loaderTpl = () => `<document>
 </document>`;
 
 let Menu = ATV.Menu.create({
-    // any attributes that you want to set on the root level menuBar element of TVML
-    attributes: {},
-    // array of menu item configurations
-    items: [{
-        id: 'home',
-        name: 'Home',
-        page: HomePage,
-        attributes: {
-            autoHighlight: true // auto highlight on navigate
-        }
-    },
-    {
-        id: 'collections',
-        name: 'Collections',
-        page: CollectionsPage,
-        attributes: {
-            autoHighlight: false // auto highlight on navigate
-        }
-    },
-    {
-        id: 'search',
-        name: 'Search',
-        page: SearchPage,
-        attributes: {
-            autoHighlight: false // auto highlight on navigate
-        }
+  // any attributes that you want to set on the root level menuBar element of TVML
+  attributes: {},
+  // array of menu item configurations
+  items: [{
+    id: 'home',
+    name: 'Home',
+    page: HomePage,
+    attributes: {
+      autoHighlight: true // auto highlight on navigate
     }
-    ]
+  }, {
+    id: 'collections',
+    name: 'Collections',
+    page: CollectionsPage,
+    attributes: {
+      autoHighlight: false // auto highlight on navigate
+    }
+  }, {
+    id: 'search',
+    name: 'Search',
+    page: SearchPage,
+    attributes: {
+      autoHighlight: false // auto highlight on navigate
+    }
+  }]
 });
 
 ATV.start({
   menu: Menu,
   templates: {
     loader: loaderTpl
+  },
+  handlers: {
+    select: {
+      globalSelecthandler(e) {
+        let element = e.target;
+
+        let hasDetail = element.getAttribute('has-detail');
+
+        if (hasDetail) {
+
+          let img = el.getElementsByTagName('img');
+
+          let photo;
+          photo = img.item(0).getAttribute('src');
+
+          ATV.Navigation.presentModal(`<document>
+                                        <oneupTemplate mode="oneup caption" allowsZooming="true">
+                                          <section>
+                                             <lockup id="photo">
+                                                <img src="${ photo }" />
+                                             </lockup>
+                                          </section>
+                                       </oneupTemplate>
+                                      </document>`);
+        }
+
+      }
+    }
   },
   onLaunch(options) {
     ATV.Navigation.navigateToMenuPage();
