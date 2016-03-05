@@ -6,7 +6,7 @@ const CLIENT_ID = 'b9288b9e4913497056fbdd1255c0147b6ed3e8e201811f2f3023f6fd5b9e3
 let template = (collections) => {
   let parsedCollections = (collections || []).map((collection) => {
     console.log('${ collection.title }', collection.title)
-    return `<lockup>
+    return `<lockup data-action="displayCollection" data-collection-id="${ collection.id }">
        <img src="https://peaceful-dusk-20602.herokuapp.com/${ collection.photoId }.jpg" width="250" height="376" />
        <title>${ collection.title.replace(/&/g, '&amp;') || "" }</title>
     </lockup>`
@@ -68,7 +68,15 @@ let CollectionsPage = ATV.Page.create({
       })
     })
     return collections
-  }
+  },
+  events: {
+    select: 'onSelect'
+  },
+  onSelect(e) {
+    let collectionId = e.target.getAttribute('data-collection-id');
+
+    ATV.Navigation.navigate('collection', {id: collectionId});
+  },
 })
 
 export default CollectionsPage

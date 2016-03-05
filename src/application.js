@@ -1,7 +1,8 @@
 import ATV from 'atvjs';
-import CollectionsPage from './pages/collections.js';
 import HomePage from './pages/home.js';
 import SearchPage from './pages/search.js';
+import CollectionsPage from './pages/collections.js';
+import CollectionPage from './pages/collection.js';
 
 const CLIENT_ID = 'b9288b9e4913497056fbdd1255c0147b6ed3e8e201811f2f3023f6fd5b9e3af0';
 
@@ -75,6 +76,9 @@ ATV.start({
           });
         } else if(action === 'dismissModal') {
           ATV.Navigation.dismissModal();
+        } else if(action === 'displayCollection') {
+
+
         }
 
       }
