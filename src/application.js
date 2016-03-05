@@ -60,15 +60,19 @@ ATV.start({
           let photo;
           photo = img.item(0).getAttribute('src');
 
-          ATV.Navigation.presentModal(`<document>
-                                        <oneupTemplate mode="oneup caption" allowsZooming="true">
-                                          <section>
-                                             <lockup data-action="dismissModal">
-                                                <img src="${ photo }" />
-                                             </lockup>
-                                          </section>
-                                       </oneupTemplate>
-                                      </document>`);
+          ATV.Navigation.presentModal({
+            template () {
+              return `<document>
+                <oneupTemplate mode="oneup caption" allowsZooming="true">
+                  <section>
+                     <lockup data-action="dismissModal">
+                        <img src="${ photo }" />
+                     </lockup>
+                  </section>
+               </oneupTemplate>
+              </document>`
+            }
+          });
         } else if(action === 'dismissModal') {
           ATV.Navigation.dismissModal();
         }
