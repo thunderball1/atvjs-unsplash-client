@@ -23,8 +23,6 @@ let HomePage = ATV.Page.create({
       tmpl += '</lockup>';
     }
 
-
-
     tmpl += `</section>
   </carousel>
 </showcaseTemplate>

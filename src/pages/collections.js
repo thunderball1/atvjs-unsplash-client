@@ -3,14 +3,33 @@ import getImgUrls from '../utils/getImgUrls.js'
 import assign from 'object-assign'
 const CLIENT_ID = 'b9288b9e4913497056fbdd1255c0147b6ed3e8e201811f2f3023f6fd5b9e3af0';
 
-let template = (collections) => {
-  let parsedCollections = (collections || []).map((collection) => {
-    console.log('${ collection.title }', collection.title)
-    return `<lockup data-action="displayCollection" data-collection-id="${ collection.id }">
-       <img src="https://peaceful-dusk-20602.herokuapp.com/${ collection.photoId }.jpg" width="250" height="376" />
-       <title>${ collection.title.replace(/&/g, '&amp;') || "" }</title>
-    </lockup>`
+let template = ({ categories }) => {
+  let parseCollections = (collections) => {
+    return (collections || []).map((collection) => {
+      return `<lockup data-action="displayCollection" data-collection-id="${ collection.id }">
+         <img src="https://peaceful-dusk-20602.herokuapp.com/${ collection.photoId }.jpg" width="250" height="376" />
+         <title>${ collection.title.replace(/&/g, '&amp;') || "" }</title>
+      </lockup>`
+    })
+    .join('')
+  }
+
+  let parsedCollections = (categories || []).map((category) => {
+    return `
+      <listItemLockup data-type='category'>
+        <title>${ category.title }</title>
+       <decorationLabel>12</decorationLabel>
+       <relatedContent>
+          <grid>
+             <section>
+                ${ parseCollections(category.collections) }
+             </section>
+          </grid>
+       </relatedContent>
+    </listItemLockup>
+    `
   })
+  .join('')
 
   return `
   <document>
@@ -20,37 +39,7 @@ let template = (collections) => {
         </banner>
         <list>
            <section>
-              <listItemLockup>
-                 <title>All</title>
-                 <decorationLabel>6</decorationLabel>
-                 <relatedContent>
-                    <grid>
-                       <section>
-                          ${ parsedCollections.join('') }
-                       </section>
-                    </grid>
-                 </relatedContent>
-              </listItemLockup>
-              <listItemLockup>
-                 <title>Currated</title>
-                 <decorationLabel>6</decorationLabel>
-                 <relatedContent>
-                    <grid>
-                       <section>
-                       </section>
-                    </grid>
-                  </relatedContent>
-              </listItemLockup>
-              <listItemLockup>
-                 <title>Featured</title>
-                 <decorationLabel>0</decorationLabel>
-                 <relatedContent>
-                    <grid>
-                       <section>
-                       </section>
-                    </grid>
-                  </relatedContent>
-              </listItemLockup>
+            ${ parsedCollections }
            </section>
         </list>
      </catalogTemplate>
@@ -60,14 +49,29 @@ let template = (collections) => {
 let CollectionsPage = ATV.Page.create({
   name: 'collections',
   template,
-  url: 'https://api.unsplash.com/collections?client_id=' + CLIENT_ID,
-  data (response) {
-    let collections = (response || []).map((collection) => {
-      return assign({}, collection, {
-        photoId: getImgUrls(collection, 'cover_photo')
+  // url: 'https://api.unsplash.com/collections?client_id=' + CLIENT_ID,
+
+  ready (options, resolve, reject) {
+    Promise.all([
+      ATV.Ajax.get('https://api.unsplash.com/collections?client_id=' + CLIENT_ID),
+      ATV.Ajax.get('https://api.unsplash.com/collections/curated?client_id=' + CLIENT_ID)
+    ])
+    .then((resutls) => {
+      resolve({
+        categories: resutls.map((xhr, index) => {
+          return {
+            title: index === 1 ? 'All' : 'Currated',
+            collections: (xhr.response || []).map((collection) => {
+              return assign({}, collection, {
+                photoId: getImgUrls(collection, 'cover_photo')
+              })
+            })
+          }
+        })
       })
+    }, (error) => {
+      reject(error)
     })
-    return collections
   },
   events: {
     select: 'onSelect'
@@ -76,7 +80,7 @@ let CollectionsPage = ATV.Page.create({
     let collectionId = e.target.getAttribute('data-collection-id');
 
     ATV.Navigation.navigate('collection', {id: collectionId});
-  },
+  }
 })
 
 export default CollectionsPage
