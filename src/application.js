@@ -1,5 +1,5 @@
 import ATV from 'atvjs';
-import HomePage from './pages/home';
+import CollectionsPage from './pages/collections';
 
 const CLIENT_ID = 'b9288b9e4913497056fbdd1255c0147b6ed3e8e201811f2f3023f6fd5b9e3af0';
 
